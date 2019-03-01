@@ -37,4 +37,6 @@ dependencies {
     compile "io.ktor:ktor-locations:$ktor_version"
     compile "io.ktor:ktor-metrics:$ktor_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
+
+    compile 'org.litote.kmongo:kmongo-coroutine:3.10.0'
 }
