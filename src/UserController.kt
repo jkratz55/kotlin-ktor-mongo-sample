@@ -15,26 +15,30 @@ fun Route.userRoutes() {
     route("/users") {
 
         get("") {
-            val r = mapOf<String, Any>("name" to "Joe Somebody",
-                "age" to 31)
+            val r = mapOf<String, Any>(
+                "name" to "Joe Somebody",
+                "age" to 31
+            )
             call.respond(HttpStatusCode.OK, r)
         }
 
         post("") {
-//            mongo<User>("users") {
-//                it.insertOne(User(userName = "jkratz",
-//                    password = "password",
-//                    email = "fhjewdowjed"))
-//                User(userName = "jkratz",
-//                    password = "password",
-//                    email = "fhjewdowjed")
-//            }
-            mongo<User>()
+            mongo<User, Unit>("users") {
+                it.insertOne(
+                    User(
+                        userName = "jkratz",
+                        password = "password",
+                        email = "fhjewdowjed"
+                    )
+                )
+            }
             call.respond(HttpStatusCode.OK)
         }
     }
 }
 
-data class User(val userName: String,
-                val password: String,
-                val email: String)
+data class User(
+    val userName: String,
+    val password: String,
+    val email: String
+)

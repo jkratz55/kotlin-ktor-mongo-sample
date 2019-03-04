@@ -15,29 +15,10 @@ fun mongo(
     block(database)
 }
 
-inline fun <reified T : Any> mongo(
-    collectionName: String,
-    block: (collection: CoroutineCollection<T>) -> T
-): T {
-    val database = mongoClient.getDatabase("test")
-    val collection = database.getCollection<T>(collectionName)
-    return block(collection)
-}
-
-inline fun <reified T : Any> mongo(
-    collectionName: String,
-    block: (collection: CoroutineCollection<T>) -> Unit
-) {
-    val database = mongoClient.getDatabase("test")
-    val collection = database.getCollection<T>(collectionName)
-    block(collection)
-}
-
 inline fun <reified TCollection: Any, TReturn> mongo(
     collectionName: String,
-    block: (collection: CoroutineCollection<TCollection> -> TReturn)
-) {
+    block: (collection: CoroutineCollection<TCollection>) -> TReturn) {
     val database = mongoClient.getDatabase("test")
-    val collection = database.getCollection<T>(collectionName)
+    val collection = database.getCollection<TCollection>(collectionName)
     block(collection)
 }
