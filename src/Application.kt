@@ -1,13 +1,20 @@
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import io.ktor.routing.*
-import io.ktor.http.*
-import com.fasterxml.jackson.databind.*
-import io.ktor.jackson.*
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.mongodb.MongoClientException
+import io.ktor.application.Application
+import io.ktor.application.install
 import io.ktor.features.*
-import io.ktor.locations.*
-import org.slf4j.event.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.jackson.jackson
+import io.ktor.locations.Locations
+import io.ktor.request.path
+import io.ktor.routing.routing
+import org.litote.kmongo.coroutine.CoroutineClient
+import org.litote.kmongo.coroutine.coroutine
+import org.litote.kmongo.reactivestreams.KMongo
+import org.slf4j.event.Level
+
+lateinit var mongoClient: CoroutineClient
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -50,5 +57,9 @@ fun Application.module(testing: Boolean = false) {
     routing {
         userRoutes()
     }
-}
 
+    val connectionString: String? = System.getenv("mongo.connectionString") ?: environment.config.propertyOrNull("mongo.connectionString")?.getString()
+    connectionString?.let {
+        mongoClient = KMongo.createClient(connectionString = it).coroutine
+    } ?: throw MongoClientException("MongoDB connection string not defined")
+}
