@@ -5,16 +5,20 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
+import org.koin.ktor.ext.inject
+import org.litote.kmongo.coroutine.CoroutineClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 fun Route.userRoutes() {
 
     val logger: Logger = LoggerFactory.getLogger("UserController")
+    val client: CoroutineClient by inject()
 
     route("/users") {
 
         get("") {
+            client.listDatabaseNames().forEach { println(it) }
             val r = mapOf<String, Any>(
                 "name" to "Joe Somebody",
                 "age" to 31

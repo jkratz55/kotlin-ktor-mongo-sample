@@ -8,14 +8,13 @@ import io.ktor.jackson.jackson
 import io.ktor.locations.Locations
 import io.ktor.request.path
 import io.ktor.routing.routing
-import org.koin.standalone.StandAloneContext.startKoin
-import org.litote.kmongo.coroutine.CoroutineClient
+import org.koin.dsl.module
+import org.koin.ktor.ext.installKoin
+import org.litote.kmongo.coroutine.coroutine
+import org.litote.kmongo.reactivestreams.KMongo
 import org.slf4j.event.Level
 
-lateinit var mongoClient: CoroutineClient
-
-fun main(args: Array<String>): Unit {
-    startKoin(listOf(appModule))
+fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
@@ -55,7 +54,15 @@ fun Application.module(testing: Boolean = false) {
         header("X-Environment", "Dev")
     }
 
+    installKoin {
+        modules(module)
+    }
+
     routing {
         userRoutes()
     }
+}
+
+val module = module {
+    single { KMongo.createClient("mongodb://127.0.0.1:32770").coroutine }
 }
