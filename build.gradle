@@ -39,4 +39,7 @@ dependencies {
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 
     compile 'org.litote.kmongo:kmongo-coroutine:3.10.0'
+    compile group: 'org.koin', name: 'koin-ktor', version: '0.9.3'
+    testCompile group: 'org.koin', name: 'koin-test', version: '0.9.3'
+
 }

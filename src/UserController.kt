@@ -23,15 +23,6 @@ fun Route.userRoutes() {
         }
 
         post("") {
-            mongo<User, Unit>("users") {
-                it.insertOne(
-                    User(
-                        userName = "jkratz",
-                        password = "password",
-                        email = "fhjewdowjed"
-                    )
-                )
-            }
             call.respond(HttpStatusCode.OK)
         }
     }

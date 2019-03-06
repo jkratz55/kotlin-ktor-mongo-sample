@@ -1,24 +1,16 @@
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineDatabase
 
-fun <T> mongo(
-    block: (database: CoroutineDatabase) -> T
-): T {
+suspend fun <T> database(block: suspend (database: CoroutineDatabase) -> T): T {
     val database = mongoClient.getDatabase("test")
     return block(database)
 }
 
-fun mongo(
-    block: (database: CoroutineDatabase) -> Unit
-) {
-    val database = mongoClient.getDatabase("test")
-    block(database)
-}
-
-inline fun <reified TCollection: Any, TReturn> mongo(
+inline fun <reified TCollection : Any, TResponse> collection(
+    database: CoroutineDatabase,
     collectionName: String,
-    block: (collection: CoroutineCollection<TCollection>) -> TReturn) {
-    val database = mongoClient.getDatabase("test")
+    block: (collection: CoroutineCollection<TCollection>) -> TResponse
+): TResponse {
     val collection = database.getCollection<TCollection>(collectionName)
-    block(collection)
+    return block(collection)
 }
