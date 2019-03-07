@@ -64,5 +64,5 @@ fun Application.module(testing: Boolean = false) {
 }
 
 val module = module {
-    single { KMongo.createClient("mongodb://127.0.0.1:32770").coroutine }
+    single { KMongo.createClient("mongodb://127.0.0.1:32768").coroutine }
 }
